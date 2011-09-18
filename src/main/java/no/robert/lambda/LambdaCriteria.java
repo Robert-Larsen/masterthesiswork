@@ -18,7 +18,7 @@ import no.robert.methodref.MethodRef;
 
 import static java.lang.reflect.Modifier.isFinal;
 
-public class LambdaCriteria<T, R>
+public class LambdaCriteria<T, R, S>
 {
     private final Method method;
 
@@ -49,9 +49,14 @@ public class LambdaCriteria<T, R>
         fieldResolverStrategies.add( new DefaultFieldResolver() );
     }
 
-    public static <T, R> LambdaCriteria<T, R> having( Class<T> type, R expression )
+    public static <T, R, S> LambdaCriteria<T, R, S> having( Class<T> type, R expression )
     {
-    	return new LambdaCriteria( type );
+    	return new LambdaCriteria<T, R, S>( type );
+    }
+    
+    public LambdaCriteria<T, R, S> with( S expression )
+    {
+    	return new LambdaCriteria<T, R, S>( type );
     }
 
     public CriteriaQuery<T> greaterThan( R expression )
@@ -133,9 +138,15 @@ public class LambdaCriteria<T, R>
     {
     	CriteriaBuilder criteriaBuilder = entityManagerFactory.getCriteriaBuilder();
     	MethodRef methodRef = MethodRef.get();
-    	
-    	if( isFinal( methodRef.getReturnType().getModifiers() ) )
+    	//methodRef = MethodRef.get();
+    	//System.out.println(methodRef.getName());
+//    	methodRef = MethodRef.get();
+//    	System.out.println(methodRef.getName());
+//    	methodRef = MethodRef.get();
+//    	System.out.println(methodRef.getName());
+    	if( isFinal( methodRef.getReturnType().getModifiers() ) ) {
     		return eqWhenNoInvocationChain( expression, criteriaBuilder, methodRef );
+    	}
     	
     	Class previousType = this.type;
     	List<Root<Object>> roots = new ArrayList<Root<Object>>();

@@ -35,6 +35,4 @@ public class Editor
     {
         return name;
     }
-    
-
 }
