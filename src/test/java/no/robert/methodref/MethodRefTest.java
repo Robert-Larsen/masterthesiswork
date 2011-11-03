@@ -37,7 +37,14 @@ public class MethodRefTest {
     @Test
     public void registersAChainOfInvocations() {
         on(Map.class).get("key").hashCode();
+
+
         MethodRef methodRef = MethodRef.get();
+
+        System.out.println(methodRef.getName());
+        System.out.println(methodRef.nextInChain().getName());
+        System.out.println(methodRef.nextInChain().nextInChain().getName());
+
         assertThat(methodRef.getArguments(), hasItemInArray((Object)"key"));
         assertThat(methodRef.nextInChain().getName(), is("hashCode"));
         assertEquals(Map.class, methodRef.getTargetType());

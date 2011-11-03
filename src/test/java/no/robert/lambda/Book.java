@@ -1,5 +1,8 @@
 package no.robert.lambda;
 
+import static org.hibernate.annotations.CascadeType.PERSIST;
+import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
+
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
@@ -10,25 +13,30 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="Books")
 public class Book
 {
-    private String title;   
-    
+    private String title;
+
     @ManyToMany
+    @Cascade({SAVE_UPDATE, PERSIST})
     private Set<Author> authors;
 
     @OneToOne
+    @Cascade({SAVE_UPDATE, PERSIST})
     private Publisher publisher;
 
     @Id
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
     private Long id;
-    
+
     private int pages;
     private double price;
     private boolean available;
@@ -56,13 +64,13 @@ public class Book
         this.pages = pages;
         this.publisher = publisher;
         this.price = price;
-        this.isPaperback = paperback;        
-        this.available = true;       
+        this.isPaperback = paperback;
+        this.available = true;
     }
-    
+
     public Book( String title, Author author, int pages, double price )
     {
-        this( title, author, pages, null, price, false );      
+        this( title, author, pages, null, price, false );
     }
 
     public Long getId()
@@ -90,12 +98,12 @@ public class Book
     {
         return this.price;
     }
-    
+
     public void setPrice( double price )
     {
         this.price = price;
     }
-    
+
     public Set<Author> getAuthors()
     {
         return this.authors;
