@@ -9,16 +9,15 @@ import no.robert.methodref.exception.MustRegisterMethodFirst;
 public class MethodRef implements InvocationRegistry {
 
     private static final ThreadLocal<MethodRef> METHODREF = new ThreadLocal<MethodRef>();
-	
+
     public static <T> T on(Class<T> type) {
     	if( METHODREF.get() == null ) {
     		MethodRef methodRef = new MethodRef();
-    		METHODREF.set(methodRef);   		
+    		METHODREF.set(methodRef);
     	}
         return proxy(type, new InvocationRegistrar(METHODREF.get()));
     }
 
-    /*
     public static MethodRef get() {
         MethodRef methodRef = METHODREF.get();
         if (methodRef != null) {
@@ -27,21 +26,21 @@ public class MethodRef implements InvocationRegistry {
         }
     throw new MustRegisterMethodFirst();
     }
-    */
-    public static MethodRef get() {
-    	MethodRef methodRef = METHODREF.get();
-    	if( methodRef.nextInChain() != null )
-    	{
-    		METHODREF.set( methodRef.nextInChain );
-    		return methodRef;
-    	}
-    	else {
-    		METHODREF.set( null );
-    		throw new MustRegisterMethodFirst();
-    	}
-   
-    }
-    
+//
+//    public static MethodRef get() {
+//    	MethodRef methodRef = METHODREF.get();
+//    	if( methodRef.nextInChain() != null )
+//    	{
+//    		METHODREF.set( methodRef.nextInChain );
+//    		return methodRef;
+//    	}
+//    	else {
+//    		METHODREF.set( null );
+//    		throw new MustRegisterMethodFirst();
+//    	}
+//
+//    }
+//
 
 
     private String name;
@@ -55,7 +54,7 @@ public class MethodRef implements InvocationRegistry {
 
     @Override
     public void register(Method method, Object[] args) {
-    	
+
         MethodRef methodRef = this;
        	for (; methodRef.nextInChain != null; methodRef = methodRef.nextInChain);
        		methodRef.name = method.getName();
@@ -81,7 +80,7 @@ public class MethodRef implements InvocationRegistry {
     public MethodRef nextInChain() {
         return nextInChain;
     }
-    
+
     public Class<?> getTargetType() {
         return targetType;
     }
