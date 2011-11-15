@@ -1,11 +1,15 @@
 package no.robert.lambda;
 
+import static org.hibernate.annotations.CascadeType.PERSIST;
+import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -19,6 +23,7 @@ public class Publisher {
     private String name;
     
     @OneToOne
+    @Cascade({SAVE_UPDATE, PERSIST})
     private Editor editor;
 
     public Publisher()

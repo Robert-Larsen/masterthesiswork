@@ -26,7 +26,7 @@ public class InvocationRegistrar implements MethodInterceptor {
     @Override
     public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) {
     	registry.register(method, args);
-        return nextInvocationRegistrarIfPossible(method.getReturnType());
+    	return nextInvocationRegistrarIfPossible(method.getReturnType());
     }
 
     

@@ -23,7 +23,7 @@ public class Strategies {
             Field field = fieldResolver.resolveFrom(type, methodRef.getName());
             if (field != null)
                 return field;
-        }
+         }
         throw new RuntimeException("Unable to resolve field from " + methodRef.getName() + "() in " + type);
     }
 

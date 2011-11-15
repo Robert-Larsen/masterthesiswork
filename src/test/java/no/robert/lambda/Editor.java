@@ -16,8 +16,6 @@ public class Editor
 
     private String name;
     
-    //private Editor editor;
-
     public Editor() {
     }
 
