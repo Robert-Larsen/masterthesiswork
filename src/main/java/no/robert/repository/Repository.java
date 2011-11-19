@@ -21,7 +21,7 @@ public class Repository {
 
     public <T> List<T> find(Class<T> entityType, CriteriaPopulator constraints) {        
     	CriteriaQuery<T> criteria = createQuery( entityType, constraints );
-        return entityManager.createQuery(criteria).getResultList();
+    	return entityManager.createQuery(criteria).getResultList();
     }
     
     public <T> T findSingle( Class<T> entityType, CriteriaPopulator constraints) {

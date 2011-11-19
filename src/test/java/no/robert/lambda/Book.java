@@ -5,6 +5,8 @@ import static org.hibernate.annotations.CascadeType.SAVE_UPDATE;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

@@ -17,36 +17,44 @@ import no.robert.repository.CriteriaPopulator;
 
 public class CollectionPropertySpecifier<PROP> implements CriteriaPopulator {
 
-    private final MethodRef methodRef;
-    private final CriteriaPopulator previous;
-    
-    private PROP elementInCollection;
+	private final MethodRef methodRef;
+	private final CriteriaPopulator previous;
+	private Path<?> previousPath;
 
-    public CollectionPropertySpecifier(MethodRef methodRef, CriteriaPopulator previous) {
-    	this.methodRef = methodRef;
-        this.previous = previous;
-    }
+	private PROP elementInCollection;
 
-    public CollectionPropertySpecifier<PROP> with(PROP element) {
-        this.elementInCollection = element;
-        return this;
-    }
+	public CollectionPropertySpecifier(MethodRef methodRef, CriteriaPopulator previous) {
+		this.methodRef = methodRef;
+		this.previous = previous;
+		this.previousPath = null;
+	}
 
-    public <NESTED_PROP> SinglePropertySpecifier<NESTED_PROP> having(NESTED_PROP name) {
-        MethodRef nextMethodRef = MethodRef.get();
-        return new SinglePropertySpecifier<NESTED_PROP>(nextMethodRef, this);
-    }
+	public CollectionPropertySpecifier<PROP> with(PROP element) {
+		this.elementInCollection = element;
+		return this;
+	}
+	
+	public Path<?> getPreviousPath() {
+		return this.previousPath;
+	}
 
-    @Override
-    public <T> void populate(CriteriaQuery<T> criteriaQuery, CriteriaBuilder builder) {
-    	previous.populate(criteriaQuery, builder);
-    	@SuppressWarnings("unchecked")
-    	Root<T> root = (Root<T>) criteriaQuery.from(methodRef.getTargetType());
-        if( elementInCollection != null ) {
-        	Path<Collection<PROP>> path = root.get(asProperty(methodRef).getName());
-        	criteriaQuery.select(root).where(builder.isMember(elementInCollection, path));
-        }
-        else
-        	criteriaQuery.select(root);
-    }
+	public <NESTED_PROP> SinglePropertySpecifier<NESTED_PROP> having(NESTED_PROP name) {
+		MethodRef nextMethodRef = MethodRef.get();
+		return new SinglePropertySpecifier<NESTED_PROP>(nextMethodRef, this);
+	}
+	
+	@Override
+	public <T> void populate(CriteriaQuery<T> criteriaQuery, CriteriaBuilder builder) {
+		previous.populate(criteriaQuery, builder);
+		@SuppressWarnings("unchecked")
+		Root<T> root = (Root<T>) criteriaQuery.from(methodRef.getTargetType());
+		if( elementInCollection != null ) {
+			Path<Collection<PROP>> path = root.get(asProperty(methodRef).getName());
+			criteriaQuery.select(root).where(builder.isMember(elementInCollection, path));
+		}
+		else {
+			this.previousPath = root.get(asProperty(methodRef).getName());
+			criteriaQuery.select(root);
+		}
+	}
 }

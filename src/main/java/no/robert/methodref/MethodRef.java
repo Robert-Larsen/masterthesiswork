@@ -26,22 +26,6 @@ public class MethodRef implements InvocationRegistry {
         }
     throw new MustRegisterMethodFirst();
     }
-//
-//    public static MethodRef get() {
-//    	MethodRef methodRef = METHODREF.get();
-//    	if( methodRef.nextInChain() != null )
-//    	{
-//    		METHODREF.set( methodRef.nextInChain );
-//    		return methodRef;
-//    	}
-//    	else {
-//    		METHODREF.set( null );
-//    		throw new MustRegisterMethodFirst();
-//    	}
-//
-//    }
-//
-
 
     private String name;
     private Object[] arguments;
